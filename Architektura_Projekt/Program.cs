@@ -170,7 +170,7 @@ namespace Architektura_Projekt
         
         public static void Cztery()
         {
-
+            ///////////
         }
 
         static void Main(string[] args)
