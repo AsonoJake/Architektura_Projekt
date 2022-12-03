@@ -19,7 +19,7 @@ namespace Architektura_Projekt
             Zmienne.Add("CL", "EF");
             Zmienne.Add("DH", "67");
             Zmienne.Add("DL", "F0");
-        } // Generowanie początkowych wartości zmiennych
+        } // Generowanie początkowych wartości zmiennych (losowo do zrobienia)
 
         public static void Sprawdz()
         {
@@ -78,13 +78,13 @@ namespace Architektura_Projekt
             Console.WriteLine("6 - CL");
             Console.WriteLine("7 - DH");
             Console.WriteLine("8 - DL");
-            Console.WriteLine("9 - Zakończ");
+            Console.WriteLine("9 - Powrót");
             Console.Write("Wybór: ");
             string temp = Console.ReadLine();
             if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "9" || temp == "9 " || temp == " 9")
             {
                 Console.Clear();
-                Console.WriteLine("Błędnie wpisany wybór / Zakończono");
+                Console.WriteLine("Błędnie wpisany wybór / Wracam");
                 Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
                 Console.ReadKey();
                 return;
@@ -128,14 +128,14 @@ namespace Architektura_Projekt
             Console.WriteLine("6 - CL");
             Console.WriteLine("7 - DH");
             Console.WriteLine("8 - DL");
-            Console.WriteLine("9 - Zakończ");
+            Console.WriteLine("9 - Powrót");
             Console.Write("Wybór: ");
             string temp = Console.ReadLine();
             string zmian = "";
             if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "9" || temp == "9 " || temp == " 9")
             {
                 Console.Clear();
-                Console.WriteLine("Błędnie wpisany wybór");
+                Console.WriteLine("Błędnie wpisany wybór / Wracam");
                 Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
                 Console.ReadKey();
                 return;
@@ -170,8 +170,175 @@ namespace Architektura_Projekt
         
         public static void Cztery()
         {
-            ///////////
-        }
+            do
+            {
+                string temp;
+                Console.Clear();
+                Console.WriteLine("Wybierz co chcesz zrobić.");
+                Console.WriteLine("1 - Inwersja NOT");
+                Console.WriteLine("2 - Dodanie INC");
+                Console.WriteLine("3 - Odejmowanie DEC");
+                Console.WriteLine("4 - Powrót");
+                Console.Write("Wybór: ");
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        Console.Clear();
+                        Console.WriteLine("Na którym chcesz wykonać operację?: ");
+                        Console.WriteLine("1 - AH");
+                        Console.WriteLine("2 - AL");
+                        Console.WriteLine("3 - BH");
+                        Console.WriteLine("4 - BL");
+                        Console.WriteLine("5 - CH");
+                        Console.WriteLine("6 - CL");
+                        Console.WriteLine("7 - DH");
+                        Console.WriteLine("8 - DL");
+                        Console.WriteLine("9 - Powrót");
+                        Console.Write("Wybór: ");
+                        temp = Console.ReadLine();
+                        if (temp.Count() == 1 && temp != "9")
+                        {
+                            int i = Convert.ToInt32(Zmienne.ElementAt(int.Parse(temp) - 1).Value, 16);
+                            string s = Convert.ToString(i, 2), dwojk = "";
+                            char[] c = s.ToCharArray();
+                            foreach (char ch in c)
+                            {
+                                if (ch == '1')
+                                {
+                                    dwojk += "0";
+                                }
+                                else
+                                {
+                                    dwojk += "1";
+                                }
+                            }
+                            int licz = 8 - dwojk.Length;
+                            while (licz > 0)
+                            {
+                                dwojk = "1" + dwojk;
+                                licz--;
+                            }
+                            Zmienne[Zmienne.ElementAt(int.Parse(temp) - 1).Key] = Convert.ToString(Convert.ToInt32(dwojk, 2), 16);
+                            Console.Clear();
+                            Console.WriteLine("Akcja pomyślna");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                            break;
+                        }
+                        else if (temp == "9")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Wracam");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Niepoprawny wybór");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                        }
+                        break;
+                    case "2":
+                        Console.Clear();
+                        Console.WriteLine("Na którym chcesz wykonać operację?: ");
+                        Console.WriteLine("1 - AH");
+                        Console.WriteLine("2 - AL");
+                        Console.WriteLine("3 - BH");
+                        Console.WriteLine("4 - BL");
+                        Console.WriteLine("5 - CH");
+                        Console.WriteLine("6 - CL");
+                        Console.WriteLine("7 - DH");
+                        Console.WriteLine("8 - DL");
+                        Console.WriteLine("9 - Zakończ");
+                        Console.Write("Wybór: ");
+                        temp = Console.ReadLine();
+                        if (temp.Count() == 1 && temp != "9")
+                        {
+                            int i = Convert.ToInt32(Zmienne.ElementAt(int.Parse(temp) - 1).Value, 16) + 1;
+                            Zmienne[Zmienne.ElementAt(int.Parse(temp) - 1).Key] = Convert.ToString(i, 16);
+                            Console.Clear();
+                            Console.WriteLine("Akcja pomyślna");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                            break;
+                        }
+                        else if (temp == "9")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Wracam");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Niepoprawny wybór");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                        }
+                        break;
+                    case "3":
+                        Console.Clear();
+                        Console.WriteLine("Na którym chcesz wykonać operację?: ");
+                        Console.WriteLine("1 - AH");
+                        Console.WriteLine("2 - AL");
+                        Console.WriteLine("3 - BH");
+                        Console.WriteLine("4 - BL");
+                        Console.WriteLine("5 - CH");
+                        Console.WriteLine("6 - CL");
+                        Console.WriteLine("7 - DH");
+                        Console.WriteLine("8 - DL");
+                        Console.WriteLine("9 - Zakończ");
+                        Console.Write("Wybór: ");
+                        temp = Console.ReadLine();
+                        if (temp.Count() == 1 && temp != "9")
+                        {
+                            int i = Convert.ToInt32(Zmienne.ElementAt(int.Parse(temp) - 1).Value, 16) - 1;
+                            Zmienne[Zmienne.ElementAt(int.Parse(temp) - 1).Key] = Convert.ToString(i, 16);
+                            Console.Clear();
+                            Console.WriteLine("Akcja pomyślna");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                            break;
+                        }
+                        else if (temp == "9")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Wracam");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Niepoprawny wybór");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                        }
+                        break;
+                    case "4":
+                        Console.Clear();
+                        Console.WriteLine("Wracam");
+                        Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                        Console.ReadKey();
+                        return;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Niepoprawny wybór");
+                        Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                        Console.ReadKey();
+                        break;
+
+                }
+            } while (true);
+        }  // Dodawanie, odejmowanie i inwersja
+
+        public static void Piec()
+        {
+            ////////
+        } 
 
         static void Main(string[] args)
         {
@@ -184,10 +351,11 @@ namespace Architektura_Projekt
                 Console.WriteLine("2 - Przekopiuj wartości");
                 Console.WriteLine("3 - Zamień wartości");
                 Console.WriteLine("4 - Inne funkcje 3.5");
-                Console.WriteLine("5 - Wyświetl wartości");
-                Console.WriteLine("6 - Zakończ");
+                Console.WriteLine("5 - Inne funkcje 4.0");
+                Console.WriteLine("6 - Wyświetl wartości");
+                Console.WriteLine("0 - Zakończ");
                 Console.Write("Wybór: ");
-                switch (Console.ReadLine())
+                switch (Console.ReadLine()) // Wybór
                 {
                     case "1":
                         Pierw();
@@ -195,13 +363,28 @@ namespace Architektura_Projekt
                     case "2":
                         Drugie();
                         break;
+                    case "3":
+                        Trz();
+                        break;
+                    case "4":
+                        Cztery();
+                        break;
                     case "5":
-                        Sprawdz();
+                        Piec(); // Do zrobienia
                         break;
                     case "6":
+                        Sprawdz();
+                        break;
+                    case "0":
                         Console.Clear();
                         Console.WriteLine("Zakończono działanie programu");
                         Environment.Exit(0);
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Niepoprawny wybór");
+                        Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                        Console.ReadKey();
                         break;
                 }
             } while (true);
