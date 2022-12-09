@@ -8,19 +8,49 @@ namespace Architektura_Projekt
 {
     public class Program
     {
-        public static Dictionary<string, string> Zmienne = new Dictionary<string, string>(8);
+        public static string Randm()
+        {
+            Random rand = new Random();
+            string str = "";
+            int randValue = rand.Next(0, 2);
+            if (randValue == 0)
+            {
+                randValue = rand.Next(0, 8);
+                str = str + Convert.ToString(randValue);
+                randValue = rand.Next(0, 6);
+                str = str + Convert.ToChar(randValue + 65);
+            }
+            else
+            {
+                randValue = rand.Next(0, 6); 
+                str = str + Convert.ToChar(randValue + 65);
+                randValue = rand.Next(0, 8);
+                str = str + Convert.ToString(randValue);
+            }
+            return str;
+        } // Losowanie wartości do przypisania do zmiennych
+        public static Dictionary<string, string> Zmienne = new Dictionary<string, string>(8); // Tworzenie słownika z podstawowymi zmiennymi
+        public static Dictionary<int, string> Pamiec = new Dictionary<int, string>(65536); // Tworzenie słownika z pamięci
         public static void Pocz()
         {
-            Zmienne.Add("AH", "01");
-            Zmienne.Add("AL", "AB");
-            Zmienne.Add("BH", "23");
-            Zmienne.Add("BL", "CD");
-            Zmienne.Add("CH", "45");
-            Zmienne.Add("CL", "EF");
-            Zmienne.Add("DH", "67");
-            Zmienne.Add("DL", "F0");
+            
+            Zmienne.Add("AH", Randm());
+            Zmienne.Add("AL", Randm());
+            Zmienne.Add("BH", Randm());
+            Zmienne.Add("BL", Randm());
+            Zmienne.Add("CH", Randm());
+            Zmienne.Add("CL", Randm());
+            Zmienne.Add("DH", Randm());
+            Zmienne.Add("DL", Randm());
         } // Generowanie początkowych wartości zmiennych (losowo do zrobienia)
-
+        public static void Pocz2()
+        {
+            for (int i = 1; i < 65537; i++)
+            {
+                Pamiec.Add(i, "00");
+            }
+        } // Generowanie pamieci
+        
         public static void Sprawdz()
         {
             Console.Clear();
@@ -64,7 +94,7 @@ namespace Architektura_Projekt
             Console.WriteLine("Akcja pomyślna");
             Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
             Console.ReadKey();
-        } // Przypisywanie nowych wartości zmiennych
+        } // Przypisywanie nowych wartości zmiennych przez użytkownika
         
         public static void Drugie()
         {
@@ -78,10 +108,10 @@ namespace Architektura_Projekt
             Console.WriteLine("6 - CL");
             Console.WriteLine("7 - DH");
             Console.WriteLine("8 - DL");
-            Console.WriteLine("9 - Powrót");
+            Console.WriteLine("0 - Powrót");
             Console.Write("Wybór: ");
             string temp = Console.ReadLine();
-            if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "9" || temp == "9 " || temp == " 9")
+            if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "0" || temp == "0 " || temp == " 0")
             {
                 Console.Clear();
                 Console.WriteLine("Błędnie wpisany wybór / Wracam");
@@ -128,11 +158,11 @@ namespace Architektura_Projekt
             Console.WriteLine("6 - CL");
             Console.WriteLine("7 - DH");
             Console.WriteLine("8 - DL");
-            Console.WriteLine("9 - Powrót");
+            Console.WriteLine("0 - Powrót");
             Console.Write("Wybór: ");
             string temp = Console.ReadLine();
             string zmian = "";
-            if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "9" || temp == "9 " || temp == " 9")
+            if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "0" || temp == "0 " || temp == " 0")
             {
                 Console.Clear();
                 Console.WriteLine("Błędnie wpisany wybór / Wracam");
@@ -174,11 +204,11 @@ namespace Architektura_Projekt
             {
                 string temp;
                 Console.Clear();
-                Console.WriteLine("Wybierz co chcesz zrobić.");
+                Console.WriteLine("Wybierz co chcesz zrobić?");
                 Console.WriteLine("1 - Inwersja NOT");
                 Console.WriteLine("2 - Dodanie INC");
                 Console.WriteLine("3 - Odejmowanie DEC");
-                Console.WriteLine("4 - Powrót");
+                Console.WriteLine("0 - Powrót");
                 Console.Write("Wybór: ");
                 switch (Console.ReadLine())
                 {
@@ -193,10 +223,10 @@ namespace Architektura_Projekt
                         Console.WriteLine("6 - CL");
                         Console.WriteLine("7 - DH");
                         Console.WriteLine("8 - DL");
-                        Console.WriteLine("9 - Powrót");
+                        Console.WriteLine("0 - Powrót");
                         Console.Write("Wybór: ");
                         temp = Console.ReadLine();
-                        if (temp.Count() == 1 && temp != "9")
+                        if (temp.Count() == 1 && temp != "0")
                         {
                             int i = Convert.ToInt32(Zmienne.ElementAt(int.Parse(temp) - 1).Value, 16);
                             string s = Convert.ToString(i, 2), dwojk = "";
@@ -225,7 +255,7 @@ namespace Architektura_Projekt
                             Console.ReadKey();
                             break;
                         }
-                        else if (temp == "9")
+                        else if (temp == "0")
                         {
                             Console.Clear();
                             Console.WriteLine("Wracam");
@@ -251,10 +281,10 @@ namespace Architektura_Projekt
                         Console.WriteLine("6 - CL");
                         Console.WriteLine("7 - DH");
                         Console.WriteLine("8 - DL");
-                        Console.WriteLine("9 - Zakończ");
+                        Console.WriteLine("0 - Zakończ");
                         Console.Write("Wybór: ");
                         temp = Console.ReadLine();
-                        if (temp.Count() == 1 && temp != "9")
+                        if (temp.Count() == 1 && temp != "0")
                         {
                             int i = Convert.ToInt32(Zmienne.ElementAt(int.Parse(temp) - 1).Value, 16) + 1;
                             Zmienne[Zmienne.ElementAt(int.Parse(temp) - 1).Key] = Convert.ToString(i, 16);
@@ -264,7 +294,7 @@ namespace Architektura_Projekt
                             Console.ReadKey();
                             break;
                         }
-                        else if (temp == "9")
+                        else if (temp == "0")
                         {
                             Console.Clear();
                             Console.WriteLine("Wracam");
@@ -290,10 +320,10 @@ namespace Architektura_Projekt
                         Console.WriteLine("6 - CL");
                         Console.WriteLine("7 - DH");
                         Console.WriteLine("8 - DL");
-                        Console.WriteLine("9 - Zakończ");
+                        Console.WriteLine("0 - Zakończ");
                         Console.Write("Wybór: ");
                         temp = Console.ReadLine();
-                        if (temp.Count() == 1 && temp != "9")
+                        if (temp.Count() == 1 && temp != "0")
                         {
                             int i = Convert.ToInt32(Zmienne.ElementAt(int.Parse(temp) - 1).Value, 16) - 1;
                             Zmienne[Zmienne.ElementAt(int.Parse(temp) - 1).Key] = Convert.ToString(i, 16);
@@ -303,7 +333,7 @@ namespace Architektura_Projekt
                             Console.ReadKey();
                             break;
                         }
-                        else if (temp == "9")
+                        else if (temp == "0")
                         {
                             Console.Clear();
                             Console.WriteLine("Wracam");
@@ -318,7 +348,7 @@ namespace Architektura_Projekt
                             Console.ReadKey();
                         }
                         break;
-                    case "4":
+                    case "0":
                         Console.Clear();
                         Console.WriteLine("Wracam");
                         Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
@@ -337,8 +367,49 @@ namespace Architektura_Projekt
 
         public static void Piec()
         {
-            ////////
-        } 
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Co chcesz zrobić?");
+                Console.WriteLine("1 - Operacja AND");
+                Console.WriteLine("2 - Operacja OR");
+                Console.WriteLine("3 - Operacja XOR");
+                Console.WriteLine("4 - Operacja ADD");
+                Console.WriteLine("5 - Operacja SUB");
+                Console.WriteLine("0 - Zakończ");
+                Console.Write("Wybór: ");
+                switch (Console.ReadLine())
+                {
+                    case "1":
+
+                        break;
+                    case "2":
+
+                        break;
+                    case "3":
+
+                        break;
+                    case "4":
+
+                        break;
+                    case "5":
+
+                        break;
+                    case "0":
+                        Console.Clear();
+                        Console.WriteLine("Wracam");
+                        Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                        Console.ReadKey();
+                        return;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Niepoprawny wybór");
+                        Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                        Console.ReadKey();
+                        break;
+                }
+            } while (true);
+        } // AND, OR, XOR, ADD, SUB
 
         static void Main(string[] args)
         {
@@ -374,6 +445,10 @@ namespace Architektura_Projekt
                         break;
                     case "6":
                         Sprawdz();
+                        break;
+                    case "7":
+                        Randm();
+                        Console.ReadKey();
                         break;
                     case "0":
                         Console.Clear();
