@@ -4,6 +4,7 @@ using System.IO.Pipes;
 using System.Reflection.Metadata.Ecma335;
 using System.Xml;
 
+
 namespace Architektura_Projekt
 {
     public class Program
@@ -33,7 +34,6 @@ namespace Architektura_Projekt
         public static Dictionary<int, string> Pamiec = new Dictionary<int, string>(65536); // Tworzenie słownika z pamięci
         public static void Pocz()
         {
-            
             Zmienne.Add("AH", Randm());
             Zmienne.Add("AL", Randm());
             Zmienne.Add("BH", Randm());
@@ -43,14 +43,29 @@ namespace Architektura_Projekt
             Zmienne.Add("DH", Randm());
             Zmienne.Add("DL", Randm());
         } // Generowanie początkowych wartości zmiennych (losowo do zrobienia)
-        public static void Pocz2()
+        public static void MemInit()
         {
             for (int i = 1; i < 65537; i++)
             {
                 Pamiec.Add(i, "00");
             }
         } // Generowanie pamieci
-        
+        public static void Initiantion()
+        {
+            Pocz(); MemInit(); // Inicjowanie
+            Console.WriteLine("Trwa inicjowanie pamięci\nTrwa generowanie losowych zmiennych");
+            ConsoleSpiner spin = new ConsoleSpiner();
+            Console.Write("Czekaj....");
+            int i = 0;
+            Random rand2 = new Random();
+            int tmp = rand2.Next(20000, 35000);
+            while (i <= tmp)
+            {
+                spin.Turn();
+                i++;
+            }
+        } // Inicjacja
+
         public static void Sprawdz()
         {
             Console.Clear();
@@ -381,19 +396,329 @@ namespace Architektura_Projekt
                 switch (Console.ReadLine())
                 {
                     case "1":
+                        Console.Clear();
+                        Console.WriteLine("Na jakich chcesz użyć AND? (wybierz dwa po spacji)");
+                        Console.WriteLine("1 - AH");
+                        Console.WriteLine("2 - AL");
+                        Console.WriteLine("3 - BH");
+                        Console.WriteLine("4 - BL");
+                        Console.WriteLine("5 - CH");
+                        Console.WriteLine("6 - CL");
+                        Console.WriteLine("7 - DH");
+                        Console.WriteLine("8 - DL");
+                        Console.WriteLine("0 - Powrót");
+                        Console.Write("Wybór: ");
+                        string temp = Console.ReadLine();
+                        if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "0" || temp == "0 " || temp == " 0")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Błędnie wpisany wybór / Wracam");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                            return;
+                        }
+                        else
+                        {
+                            string wybor1 = temp.Split(' ')[0], wybor2 = temp.Split(' ')[1];
+                            if (wybor1 == "1" || wybor1 == "2" || wybor1 == "3" || wybor1 == "4" || wybor1 == "5" || wybor1 == "6" || wybor1 == "7" || wybor1 == "8")
+                            {
+                                if (wybor2 == "1" || wybor2 == "2" || wybor2 == "3" || wybor2 == "4" || wybor2 == "5" || wybor2 == "6" || wybor2 == "7" || wybor2 == "8")
+                                {
+                                    int itemp1 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor1) - 1).Value, 16), itemp2 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor2) - 1).Value, 16);
+                                    string temp1 = Convert.ToString(itemp1, 2), temp2 = Convert.ToString(itemp2, 2);
+                                    int zmiana = itemp1 & itemp2;
 
+                                    if (Convert.ToString(zmiana, 16).Length <= 1)
+                                    {
+                                        if (Convert.ToString(zmiana, 16).Length == 1) Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32("0" + Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        else Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = "0";
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32(Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Console.WriteLine("Wystąpił błąd!");
+                                            Console.WriteLine("Akcja może nie być możliwa do wykonania");
+                                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                                            Console.ReadKey();
+                                            Console.Clear();
+                                        }
+                                    }
+                                }
+                                else return;
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Niepoprawny wybór");
+                                Console.ReadKey();
+                                return;
+                            }
+                        }
                         break;
                     case "2":
+                        Console.Clear();
+                        Console.WriteLine("Na jakich chcesz użyć OR? (wybierz dwa po spacji)");
+                        Console.WriteLine("1 - AH");
+                        Console.WriteLine("2 - AL");
+                        Console.WriteLine("3 - BH");
+                        Console.WriteLine("4 - BL");
+                        Console.WriteLine("5 - CH");
+                        Console.WriteLine("6 - CL");
+                        Console.WriteLine("7 - DH");
+                        Console.WriteLine("8 - DL");
+                        Console.WriteLine("0 - Powrót");
+                        Console.Write("Wybór: ");
+                        string tempOR = Console.ReadLine();
+                        if (tempOR.Count() != 3 && tempOR.Count(c => !Char.IsWhiteSpace(c)) != 2 || tempOR.Count() == 3 && tempOR.Count(c => !Char.IsWhiteSpace(c)) != 2 || tempOR == "0" || tempOR == "0 " || tempOR == " 0")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Błędnie wpisany wybór / Wracam");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                            return;
+                        }
+                        else
+                        {
+                            string wybor1 = tempOR.Split(' ')[0], wybor2 = tempOR.Split(' ')[1];
+                            if (wybor1 == "1" || wybor1 == "2" || wybor1 == "3" || wybor1 == "4" || wybor1 == "5" || wybor1 == "6" || wybor1 == "7" || wybor1 == "8")
+                            {
+                                if (wybor2 == "1" || wybor2 == "2" || wybor2 == "3" || wybor2 == "4" || wybor2 == "5" || wybor2 == "6" || wybor2 == "7" || wybor2 == "8")
+                                {
+                                    int itemp1 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor1) - 1).Value, 16), itemp2 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor2) - 1).Value, 16);
+                                    string temp1 = Convert.ToString(itemp1, 2), temp2 = Convert.ToString(itemp2, 2);
+                                    int zmiana = itemp1 | itemp2;
 
+                                    if (Convert.ToString(zmiana, 16).Length <= 1)
+                                    {
+                                        if (Convert.ToString(zmiana, 16).Length == 1) Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32("0" + Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        else Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = "0";
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32(Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Console.WriteLine("Wystąpił błąd!");
+                                            Console.WriteLine("Akcja może nie być możliwa do wykonania");
+                                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                                            Console.ReadKey();
+                                            Console.Clear();
+                                        }
+                                    }
+                                }
+                                else return;
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Niepoprawny wybór");
+                                Console.ReadKey();
+                                return;
+                            }
+                        }
                         break;
                     case "3":
+                        Console.Clear();
+                        Console.WriteLine("Na jakich chcesz użyć XOR? (wybierz dwa po spacji)");
+                        Console.WriteLine("1 - AH");
+                        Console.WriteLine("2 - AL");
+                        Console.WriteLine("3 - BH");
+                        Console.WriteLine("4 - BL");
+                        Console.WriteLine("5 - CH");
+                        Console.WriteLine("6 - CL");
+                        Console.WriteLine("7 - DH");
+                        Console.WriteLine("8 - DL");
+                        Console.WriteLine("0 - Powrót");
+                        Console.Write("Wybór: ");
+                        temp = Console.ReadLine();
+                        if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "0" || temp == "0 " || temp == " 0")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Błędnie wpisany wybór / Wracam");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                            return;
+                        }
+                        else
+                        {
+                            string wybor1 = temp.Split(' ')[0], wybor2 = temp.Split(' ')[1];
+                            if (wybor1 == "1" || wybor1 == "2" || wybor1 == "3" || wybor1 == "4" || wybor1 == "5" || wybor1 == "6" || wybor1 == "7" || wybor1 == "8")
+                            {
+                                if (wybor2 == "1" || wybor2 == "2" || wybor2 == "3" || wybor2 == "4" || wybor2 == "5" || wybor2 == "6" || wybor2 == "7" || wybor2 == "8")
+                                {
+                                    int itemp1 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor1) - 1).Value, 16), itemp2 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor2) - 1).Value, 16);
+                                    string temp1 = Convert.ToString(itemp1, 2), temp2 = Convert.ToString(itemp2, 2);
+                                    int zmiana = itemp1 ^ itemp2;
 
+                                    if (Convert.ToString(zmiana, 16).Length <= 1)
+                                    {
+                                        if (Convert.ToString(zmiana, 16).Length == 1) Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32("0" + Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        else Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = "0";
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32(Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Console.WriteLine("Wystąpił błąd!");
+                                            Console.WriteLine("Akcja może nie być możliwa do wykonania w tej chwili");
+                                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                                            Console.ReadKey();
+                                            Console.Clear();
+                                        }
+                                    }
+                                }
+                                else return;
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Niepoprawny wybór");
+                                Console.ReadKey();
+                                return;
+                            }
+                        }
                         break;
                     case "4":
+                        Console.Clear();
+                        Console.WriteLine("Na jakich chcesz użyć ADD? (wybierz dwa po spacji)");
+                        Console.WriteLine("1 - AH");
+                        Console.WriteLine("2 - AL");
+                        Console.WriteLine("3 - BH");
+                        Console.WriteLine("4 - BL");
+                        Console.WriteLine("5 - CH");
+                        Console.WriteLine("6 - CL");
+                        Console.WriteLine("7 - DH");
+                        Console.WriteLine("8 - DL");
+                        Console.WriteLine("0 - Powrót");
+                        Console.Write("Wybór: ");
+                        temp = Console.ReadLine();
+                        if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "0" || temp == "0 " || temp == " 0")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Błędnie wpisany wybór / Wracam");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                            return;
+                        }
+                        else
+                        {
+                            string wybor1 = temp.Split(' ')[0], wybor2 = temp.Split(' ')[1];
+                            if (wybor1 == "1" || wybor1 == "2" || wybor1 == "3" || wybor1 == "4" || wybor1 == "5" || wybor1 == "6" || wybor1 == "7" || wybor1 == "8")
+                            {
+                                if (wybor2 == "1" || wybor2 == "2" || wybor2 == "3" || wybor2 == "4" || wybor2 == "5" || wybor2 == "6" || wybor2 == "7" || wybor2 == "8")
+                                {
+                                    int itemp1 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor1) - 1).Value, 16), itemp2 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor2) - 1).Value, 16);
+                                    string temp1 = Convert.ToString(itemp1, 2), temp2 = Convert.ToString(itemp2, 2);
+                                    int zmiana = itemp1 + itemp2;
 
+                                    if (Convert.ToString(zmiana, 16).Length <= 1)
+                                    {
+                                        if (Convert.ToString(zmiana, 16).Length == 1) Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32("0" + Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        else Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = "0";
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32(Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Console.WriteLine("Wystąpił błąd!");
+                                            Console.WriteLine("Akcja może nie być możliwa do wykonania");
+                                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                                            Console.ReadKey();
+                                            Console.Clear();
+                                        }
+                                    }
+                                }
+                                else return;
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Niepoprawny wybór");
+                                Console.ReadKey();
+                                return;
+                            }
+                        }
                         break;
                     case "5":
+                        Console.Clear();
+                        Console.WriteLine("Na jakich chcesz użyć SUB? (wybierz dwa po spacji)");
+                        Console.WriteLine("1 - AH");
+                        Console.WriteLine("2 - AL");
+                        Console.WriteLine("3 - BH");
+                        Console.WriteLine("4 - BL");
+                        Console.WriteLine("5 - CH");
+                        Console.WriteLine("6 - CL");
+                        Console.WriteLine("7 - DH");
+                        Console.WriteLine("8 - DL");
+                        Console.WriteLine("0 - Powrót");
+                        Console.Write("Wybór: ");
+                        temp = Console.ReadLine();
+                        if (temp.Count() != 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp.Count() == 3 && temp.Count(c => !Char.IsWhiteSpace(c)) != 2 || temp == "0" || temp == "0 " || temp == " 0")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Błędnie wpisany wybór / Wracam");
+                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                            Console.ReadKey();
+                            return;
+                        }
+                        else
+                        {
+                            string wybor1 = temp.Split(' ')[0], wybor2 = temp.Split(' ')[1];
+                            if (wybor1 == "1" || wybor1 == "2" || wybor1 == "3" || wybor1 == "4" || wybor1 == "5" || wybor1 == "6" || wybor1 == "7" || wybor1 == "8")
+                            {
+                                if (wybor2 == "1" || wybor2 == "2" || wybor2 == "3" || wybor2 == "4" || wybor2 == "5" || wybor2 == "6" || wybor2 == "7" || wybor2 == "8")
+                                {
+                                    int itemp1 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor1) - 1).Value, 16), itemp2 = Convert.ToInt32(Zmienne.ElementAt(int.Parse(wybor2) - 1).Value, 16);
+                                    string temp1 = Convert.ToString(itemp1, 2), temp2 = Convert.ToString(itemp2, 2);
+                                    int zmiana = itemp1 - itemp2;
 
+                                    if (Convert.ToString(zmiana, 16).Length <= 1)
+                                    {
+                                        if (Convert.ToString(zmiana, 16).Length == 1) Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32("0" + Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        else Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = "0";
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            Zmienne[Zmienne.ElementAt(int.Parse(wybor1) - 1).Key] = Convert.ToInt32(Convert.ToString(zmiana, 16), 2).ToString("X");
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Console.WriteLine("Wystąpił błąd!");
+                                            Console.WriteLine("Akcja może nie być możliwa do wykonania");
+                                            Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                                            Console.ReadKey();
+                                            Console.Clear();
+                                        }
+                                    }
+                                }
+                                else return;
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Niepoprawny wybór");
+                                Console.ReadKey();
+                                return;
+                            }
+                        }
                         break;
                     case "0":
                         Console.Clear();
@@ -413,7 +738,7 @@ namespace Architektura_Projekt
 
         static void Main(string[] args)
         {
-            Pocz(); // Inicjowanie
+            Initiantion(); // Start programu
             do
             {
                 Console.Clear();
@@ -441,7 +766,7 @@ namespace Architektura_Projekt
                         Cztery();
                         break;
                     case "5":
-                        Piec(); // Do zrobienia
+                        Piec();
                         break;
                     case "6":
                         Sprawdz();
@@ -463,6 +788,27 @@ namespace Architektura_Projekt
                         break;
                 }
             } while (true);
+        }
+    }
+    
+    public class ConsoleSpiner
+    {
+        int counter;
+        public ConsoleSpiner()
+        {
+            counter = 0;
+        }
+        public void Turn()
+        {
+            counter++;
+            switch (counter % 4)
+            {
+                case 0: Console.Write("/"); break;
+                case 1: Console.Write("-"); break;
+                case 2: Console.Write("\\"); break;
+                case 3: Console.Write("|"); break;
+            }
+            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
         }
     }
 }
